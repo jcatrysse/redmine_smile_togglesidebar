@@ -1,0 +1,33 @@
+<%
+  show_sidebar = session[ session_name_show_sidebar(
+      params['original_controller'], params['original_action']
+    ) ]
+
+  # If not set in session, show the sidebar if enabled
+  show_sidebar = true if show_sidebar.nil?
+-%>
+
+image_toggle_sidebar_true='<%= image_toggle_sidebar(true) %>';
+image_toggle_sidebar_false='<%= image_toggle_sidebar(false) %>';
+
+if (<%= show_sidebar %>) {
+<% if Rails::VERSION::MAJOR < 3 %>
+  $('main').removeClassName('nosidebar');
+  $('sidebar_view').src = image_toggle_sidebar_true;
+  $('main').trigger("resize");
+<% else %>
+  $('#main').removeClass('nosidebar');
+  $('#sidebar_view').attr('src', image_toggle_sidebar_true);
+  $('#main').trigger("resize");
+<% end %>
+} else {
+<% if Rails::VERSION::MAJOR < 3 %>
+  $('main').addClassName('nosidebar');
+  $('sidebar_view').src = image_toggle_sidebar_false;
+  $('main').trigger("resize");
+<% else %>
+  $('#main').addClass('nosidebar');
+  $('#sidebar_view').attr('src', image_toggle_sidebar_false);
+  $('#main').trigger("resize");
+<% end %>
+}
